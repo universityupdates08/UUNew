@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home | University Updates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #fb923c; 
+            --secondary: #2563eb; 
+            --accent: #f1f5f9;
+            --star: #fbbf24;
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark {
+            --bg: #020617;
+            --card: #0f172a;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #1e293b;
+            --accent: #1e293b;
+            --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* --- OVERLAY & SIDEBAR --- */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px); opacity: 0; visibility: hidden;
+            transition: all 0.3s ease-in-out; z-index: 1500;
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 24px; height: 70px; background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000; transition: background 0.3s;
+        }
+        body.dark .header { background: rgba(15, 23, 42, 0.8); }
+        
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+
+        .menu-btn {
+            background: var(--accent); border: none; width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; cursor: pointer; color: var(--text); transition: 0.2s;
+        }
+        .menu-btn:hover { background: var(--border); }
+        
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+        
+        .btn-base {
+            border: none; padding: 10px 18px; border-radius: 10px; font-weight: 600;
+            font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s; text-decoration: none;
+        }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: var(--accent); }
+        .btn-primary { background: var(--text); color: var(--bg); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        body.dark .btn-primary:hover { box-shadow: 0 4px 12px rgba(255,255,255,0.1); }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            position: fixed; left: -280px; top: 0; width: 280px; height: 100vh;
+            background: var(--card); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px; z-index: 2000; box-shadow: 20px 0 50px rgba(0,0,0,0.15);
+            display: flex; flex-direction: column;
+        }
+        .sidebar.active { transform: translateX(280px); }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-sidebar { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; }
+        
+        .side-nav-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; display: block;}
+        .side-btn {
+            width: 100%; padding: 12px 16px; margin-bottom: 8px; border: none; border-radius: 10px;
+            background: transparent; color: var(--text); font-weight: 500; text-align: left; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; gap: 12px; text-decoration: none;
+        }
+        .side-btn:hover, .side-btn.active { background: var(--accent); color: var(--primary); font-weight: 600; }
+
+        .theme-switch-wrapper {
+            background: var(--accent); padding: 12px 16px; border-radius: 12px;
+            margin-top: auto; display: flex; align-items: center; justify-content: space-between;
+        }
+        .theme-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #cbd5e1; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative; padding: 60px 24px; max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between; gap: 40px;
+            min-height: 80vh;
+        }
+
+        .hero-content { flex: 1; max-width: 600px; z-index: 2; }
+        
+        .badge {
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+            background: var(--accent); border: 1px solid var(--border); border-radius: 999px;
+            font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: clamp(40px, 5vw, 64px);
+            line-height: 1.1; margin: 0 0 20px 0; color: var(--text);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero p { font-size: 18px; color: var(--muted); margin: 0 0 32px 0; line-height: 1.6; }
+
+        .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+        .hero-btns .btn-base { padding: 14px 28px; font-size: 16px; }
+
+        /* Abstract Graphics */
+        .hero-graphics {
+            flex: 1; position: relative; height: 500px; display: flex;
+            justify-content: center; align-items: center;
+        }
+
+        .shape { position: absolute; border-radius: 50%; filter: blur(60px); z-index: 0; opacity: 0.6; animation: float 8s ease-in-out infinite; }
+        .shape-1 { width: 300px; height: 300px; background: rgba(251, 146, 60, 0.4); top: 10%; right: 20%; }
+        .shape-2 { width: 250px; height: 250px; background: rgba(37, 99, 235, 0.3); bottom: 10%; left: 10%; animation-delay: -4s; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* --- PARTNER BADGES --- */
+        .partners-bar {
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            background: var(--card); padding: 24px; text-align: center;
+        }
+        .partners-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 16px; letter-spacing: 1px; }
+        .partners-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; max-width: 1000px; margin: 0 auto;
+        }
+        .partner-item { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--muted); font-size: 18px; filter: grayscale(100%); opacity: 0.7; transition: 0.3s; }
+        .partner-item:hover { filter: grayscale(0%); opacity: 1; color: var(--text); }
+        .partner-item.razorpay:hover { color: #3395ff; }
+        
+        /* --- SECTION STYLES --- */
+        .section { padding: 80px 24px; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 48px; }
+        .section-header h2 { font-size: 32px; font-weight: 700; margin: 0 0 12px 0; }
+        .section-header p { color: var(--muted); font-size: 16px; margin: 0; }
+
+        /* Features Grid */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .feature-box { text-align: center; padding: 40px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 24px; transition: 0.3s; }
+        .feature-box:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--primary); }
+        .feature-icon { width: 64px; height: 64px; margin: 0 auto 20px; background: var(--accent); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+        .feature-box h3 { font-size: 18px; margin: 0 0 10px; }
+        .feature-box p { font-size: 14px; color: var(--muted); margin: 0; }
+
+        /* Teams Grid */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto; }
+        .team-card { background: var(--card); padding: 30px; border-radius: 24px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); transition: 0.3s; }
+        .team-card:hover { transform: translateY(-5px); border-color: var(--secondary); }
+        .t-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--primary)); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .team-card h3 { margin: 0 0 4px; font-size: 18px; }
+        .team-card p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 500; }
+
+        /* Products Grid */
+        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+        .p-image { height: 160px; background: linear-gradient(135deg, var(--accent), var(--border)); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 40px; position: relative; }
+        .p-badge { position: absolute; top: 12px; right: 12px; background: var(--primary); color: white; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+        .p-details { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .p-title { font-weight: 700; font-size: 16px; margin: 0 0 8px; color: var(--text); }
+        .p-author { font-size: 13px; color: var(--muted); margin: 0 0 12px; display: flex; align-items: center; gap: 6px; }
+        .p-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--star); margin-bottom: 16px; font-weight: 600; }
+        .p-rating span { color: var(--muted); margin-left: 4px; font-weight: 500; }
+        .p-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border); padding-top: 16px; }
+        .p-price { font-weight: 800; font-size: 18px; color: var(--text); }
+        .p-price strike { color: var(--muted); font-size: 14px; font-weight: 500; margin-right: 6px; }
+        .btn-cart { background: var(--accent); border: none; padding: 8px 16px; border-radius: 10px; color: var(--text); cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; text-decoration: none;}
+        .btn-cart:hover { background: var(--primary); color: white; }
+
+        /* --- FOOTER --- */
+        .footer { background: var(--card); border-top: 1px solid var(--border); padding: 60px 24px 40px; margin-top: 40px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+        
+        .f-col h4 { font-size: 16px; font-weight: 700; margin: 0 0 20px; color: var(--text); }
+        .f-col a { display: block; color: var(--muted); text-decoration: none; margin-bottom: 12px; font-size: 14px; transition: 0.2s; }
+        .f-col a:hover { color: var(--primary); }
+        
+        .f-brand { max-width: 300px; }
+        .f-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: block; }
+        .f-desc { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+        
+        .social-links { display: flex; gap: 16px; }
+        .social-links a { color: var(--muted); font-size: 20px; transition: 0.2s; }
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
+
+        .footer-bottom { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding-top: 24px; text-align: center; color: var(--muted); font-size: 13px; }
+
+        @media (max-width: 992px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 40px; }
+            .hero-btns { justify-content: center; }
+            .hero-graphics { height: 300px; width: 100%; margin-top: 40px; }
+            .badge { margin: 0 auto 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 36px; }
+            .hero-btns { flex-direction: column; width: 100%; }
+            .hero-btns .btn-base { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-left">
+        <button class="menu-btn" id="menuBtn"><i class="fas fa-bars-staggered"></i></button>
+        <div class="logo-text">University Updates</div>
+    </div>
+    <div class="header-right">
+        {% if current_user.is_authenticated %}
+            <a href="/home" class="btn-base btn-outline">Dashboard</a>
+            <a href="/store_cart" class="btn-base btn-primary"><i class="fas fa-shopping-cart"></i> Cart</a>
+        {% else %}
+            <a href="/login" class="btn-base btn-outline">Login</a>
+            <a href="/register" class="btn-base btn-primary">Sign Up</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <span class="side-nav-label" style="margin:0;">Menu</span>
+        <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+    </div>
+
+    <a href="/" class="side-btn active"><i class="fas fa-home fa-fw"></i> Home</a>
+    <a href="/store" class="side-btn"><i class="fas fa-store fa-fw"></i> Digital Store</a>
+    <a href="/freeread" class="side-btn"><i class="fas fa-book-open fa-fw"></i> Free Resources</a>
+    
+    {% if current_user.is_authenticated %}
+        <a href="/home" class="side-btn"><i class="fas fa-chart-line fa-fw"></i> Dashboard</a>
+        <a href="/logout" class="side-btn"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
+    {% else %}
+        <a href="/login" class="side-btn"><i class="fas fa-sign-in-alt fa-fw"></i> Login</a>
+    {% endif %}
+    
+    <div class="theme-switch-wrapper">
+        <span class="theme-label"><i class="fas fa-moon"></i> Night Mode</span>
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <div class="hero-content">
+        <div class="badge">
+            <i class="fas fa-bolt"></i> Elevate Your Learning
+        </div>
+        <h1>Your Ultimate <br> <span class="text-gradient">Academic Arsenal</span></h1>
+        <p>Access high-quality, verified digital study materials, notes, and past papers. Join thousands of students achieving academic excellence today.</p>
+        
+        <div class="hero-btns">
+            <a href="/store" class="btn-base btn-primary">
+                Explore Store <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="/register" class="btn-base btn-outline">
+                Become a Seller
+            </a>
+        </div>
+    </div>
+    
+    <div class="hero-graphics">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        
+        <div class="floating-card">
+            <div class="fc-icon"><i class="fas fa-file-pdf"></i></div>
+            <div class="fc-text">
+                <h4>Verified Notes</h4>
+                <p>Top-rated by students</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PARTNER BADGES -->
+<div class="partners-bar">
+    <div class="partners-title">Powered By & Trusted Across</div>
+    <div class="partners-grid">
+        <div class="partner-item razorpay">
+            <i class="fas fa-shield-check" style="font-size: 24px;"></i> Razorpay Secure
+        </div>
+        <div class="partner-item">
+            <i class="fas fa-university"></i> CCSU Network
+        </div>
+        <div class="partner-item">
+            <i class="fas fa-graduation-cap"></i> MSU Students
+        </div>
+        <div class="partner-item">
+            <i class="fas fa-laptop-code"></i> AKTU Verified
+        </div>
+        <div class="partner-item">
+            <i class="fas fa-users"></i> 100K+ Community
+        </div>
+    </div>
+</div>
+
+<!-- FEATURES SECTION (Why Choose Us) -->
+<div class="section" style="background: var(--card); border-bottom: 1px solid var(--border); max-width: 100%;">
+    <div class="section-header">
+        <h2>Why Choose Us?</h2>
+        <p>Everything you need to succeed, all in one platform.</p>
+    </div>
+    <div class="features" style="max-width: 1200px; margin: 0 auto;">
+        <div class="feature-box">
+            <div class="feature-icon"><i class="fas fa-check-double"></i></div>
+            <h3>Quality Assured</h3>
+            <p>Every PDF and study material is reviewed by our community and verified for academic accuracy.</p>
+        </div>
+        <div class="feature-box">
+            <div class="feature-icon" style="color: var(--secondary);"><i class="fas fa-bolt"></i></div>
+            <h3>Instant Access</h3>
+            <p>Purchase and download your resources immediately. No waiting times, just pure studying.</p>
+        </div>
+        <div class="feature-box">
+            <div class="feature-icon" style="color: #8b5cf6;"><i class="fas fa-coins"></i></div>
+            <h3>Earn by Sharing</h3>
+            <p>Upload your own high-quality notes and earn money every time a student buys them.</p>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURED PRODUCTS SECTION (Trending Resources) -->
+<div class="section">
+    <div class="section-header">
+        <h2>Trending Resources</h2>
+        <p>Discover what other students are studying right now.</p>
+    </div>
+    
+    <div class="products">
+        {% if trending_products %}
+            {% for product in trending_products %}
+            <div class="product-card">
+                <div class="p-image">
+                    <i class="fas fa-book"></i>
+                    {% if product.discount and product.discount > 0 %}
+                    <div class="p-badge">-{{ product.discount }}%</div>
+                    {% endif %}
+                </div>
+                <div class="p-details">
+                    <h3 class="p-title">{{ product.name }}</h3>
+                    <div class="p-author"><i class="fas fa-store"></i> Seller: {{ product.seller_name }}</div>
+                    <div class="p-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        <span>({{ product.reviews_count | default('42') }} reviews)</span>
+                    </div>
+                    <div class="p-footer">
+                        <div class="p-price">
+                            {% if product.discount and product.discount > 0 %}
+                                {% set final_price = product.price - (product.price * (product.discount / 100)) %}
+                                <strike>₹{{ product.price }}</strike> ₹{{ final_price|int }}
+                            {% else %}
+                                ₹{{ product.price }}
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Auto-redirects to login if not authenticated via Flask @login_required, then adds to cart -->
+                        <a href="/add_to_cart/{{ product.id }}" class="btn-cart">
+                            <i class="fas fa-shopping-cart"></i> Buy Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Fallback Mockup Data if no Jinja context passed -->
+            <div class="product-card">
+                <div class="p-image">
+                    <i class="fas fa-square-root-alt"></i>
+                    <div class="p-badge">BESTSELLER</div>
+                </div>
+                <div class="p-details">
+                    <h3 class="p-title">Engineering Calculus Complete Guide</h3>
+                    <div class="p-author"><i class="fas fa-store"></i> Seller: EduNotes</div>
+                    <div class="p-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        <span>(89 reviews)</span>
+                    </div>
+                    <div class="p-footer">
+                        <div class="p-price">₹249</div>
+                        <a href="/add_to_cart/1" class="btn-cart"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="p-image">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <div class="p-details">
+                    <h3 class="p-title">Hindi Bhasha aur Sampreshan</h3>
+                    <div class="p-author"><i class="fas fa-store"></i> Seller: Academic Press</div>
+                    <div class="p-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        <span>(312 reviews)</span>
+                    </div>
+                    <div class="p-footer">
+                        <div class="p-price">₹199</div>
+                        <a href="/add_to_cart/2" class="btn-cart"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="/store" class="btn-base btn-outline" style="display: inline-flex;">View Entire Store</a>
+    </div>
+</div>
+
+<!-- TEAMS SECTION -->
+<div class="section" style="background: var(--card); border-top: 1px solid var(--border); max-width: 100%;">
+    <div class="section-header">
+        <h2>Meet Our Team</h2>
+        <p>The minds building the future of digital education.</p>
+    </div>
+    
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="t-avatar">AC</div>
+            <h3>Aditya Chaudhary</h3>
+            <p>Owner & Lead Designer</p>
+        </div>
+        <div class="team-card">
+            <div class="t-avatar" style="background: linear-gradient(135deg, #8b5cf6, var(--secondary));">CJ</div>
+            <h3>Chetan Joshi</h3>
+            <p>Co-Owner & Development</p>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="footer-grid">
+        <div class="f-brand f-col">
+            <span class="f-logo">University Updates</span>
+            <p class="f-desc">Your ultimate digital educational platform. Get the latest verified notes, datesheets, and academic resources tailored for your success.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        
+        <div class="f-col">
+            <h4>Quick Links</h4>
+            <a href="/">Home</a>
+            <a href="/about">About Us</a>
+            <a href="/store">Digital Store</a>
+            <a href="/freeread">Free Resources</a>
+        </div>
+        
+        <div class="f-col">
+            <h4>Support</h4>
+            <a href="/help">Help Center</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/register">Become a Seller</a>
+        </div>
+        
+        <div class="f-col">
+            <h4>Legal</h4>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms & Conditions</a>
+            <a href="/refunds">Refund Policy</a>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        &copy; 2026 University Updates. All rights reserved. Designed for students, by students.
+    </div>
+</div>
+
+<script>
+    // --- Sidebar Logic ---
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeSidebar = document.getElementById("closeSidebar");
+    const toggle = document.getElementById("themeToggle");
+
+    const openNav = () => {
+        sidebar.classList.add("active");
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+    };
+
+    const closeNav = () => {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+    };
+
+    menuBtn.onclick = openNav;
+    closeSidebar.onclick = closeNav;
+    overlay.onclick = closeNav;
+
+    // --- Theme Logic ---
+    const applyTheme = (theme) => {
+        if (theme === "dark") {
+            document.body.classList.add("dark");
+            toggle.checked = true;
+        } else {
+            document.body.classList.remove("dark");
+            toggle.checked = false;
+        }
+    };
+
+    // Check local storage on load
+    applyTheme(localStorage.getItem("theme"));
+
+    toggle.onchange = () => {
+        const newTheme = toggle.checked ? "dark" : "light";
+        applyTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+    };
+</script>
+
+</body>
+</html>
