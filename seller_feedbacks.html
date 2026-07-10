@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>My Feedbacks | Seller Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --muted: #64748b;
+            --border: #e2e8f0; --primary: #16a34a; --secondary: #2563eb;
+            --accent: #f1f5f9; --star: #fbbf24; --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+        body.dark {
+            --bg: #020617; --card: #0f172a; --text: #f1f5f9; --muted: #94a3b8;
+            --border: #1e293b; --accent: #1e293b; --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: background 0.3s ease; }
+
+        /* HEADER & SIDEBAR */
+        .overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.4); backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 1500; }
+        .overlay.active { opacity: 1; visibility: visible; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 0 24px; height: 70px; background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .menu-btn { background: var(--accent); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; color: var(--text); }
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: var(--card); transition: 0.3s; padding: 20px; z-index: 2000; box-shadow: 20px 0 50px rgba(0,0,0,0.15); display: flex; flex-direction: column; }
+        .sidebar.active { transform: translateX(280px); }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-sidebar { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; }
+        .side-btn { width: 100%; padding: 12px 16px; margin-bottom: 8px; border: none; border-radius: 10px; background: transparent; color: var(--text); font-weight: 500; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .side-btn.active { background: var(--accent); color: var(--secondary); font-weight: 600; }
+        .theme-switch-wrapper { background: var(--accent); padding: 12px 16px; border-radius: 12px; margin-top: auto; display: flex; align-items: center; justify-content: space-between; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #cbd5e1; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--secondary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* PAGE CONTENT */
+        .page-wrap { padding: 32px 24px; max-width: 1200px; margin: auto; }
+        .page-title { font-size: 24px; font-weight: 700; margin: 0 0 24px 0; }
+
+        /* STATS */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 16px; }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--accent); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .stat-info h4 { margin: 0; color: var(--muted); font-size: 13px; text-transform: uppercase; }
+        .stat-info div { font-size: 24px; font-weight: 700; color: var(--text); margin-top: 4px; }
+
+        /* REVIEWS GRID */
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+        .review-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+        
+        .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .reviewer-info { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--primary)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .reviewer-name { font-weight: 600; font-size: 15px; color: var(--text); }
+        .review-date { font-size: 12px; color: var(--muted); }
+        
+        .stars { color: var(--star); font-size: 14px; display: flex; gap: 2px; }
+        
+        .pdf-badge { display: inline-block; background: var(--accent); color: var(--text); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-bottom: 12px; border: 1px solid var(--border); }
+        .review-msg { font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0; flex-grow: 1; }
+        
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: var(--card); border-radius: 20px; border: 1px dashed var(--border); }
+        .empty-state i { font-size: 48px; color: var(--muted); margin-bottom: 16px; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="header">
+    <div class="header-left">
+        <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+        <div>
+            <div style="font-weight: 700; font-size: 14px;">Seller Portal</div>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <span style="font-weight: 700; color: var(--muted); font-size: 12px;">Menu</span>
+        <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+    </div>
+    <button class="side-btn" onclick="location.href='/seller/dashboard'"><i class="fas fa-chart-line fa-fw"></i> Dashboard</button>
+    <button class="side-btn" onclick="location.href='/seller/pdfs'"><i class="fas fa-file-pdf fa-fw"></i> My Uploads</button>
+    <button class="side-btn active" onclick="location.href='/seller/feedbacks'"><i class="fas fa-star fa-fw"></i> Student Feedbacks</button>
+    
+    <div class="theme-switch-wrapper">
+        <span class="theme-label"><i class="fas fa-moon"></i> Night Mode</span>
+        <label class="switch"><input type="checkbox" id="themeToggle"><span class="slider"></span></label>
+    </div>
+</div>
+
+<div class="page-wrap">
+    <h1 class="page-title">Student Feedbacks</h1>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-comment-dots"></i></div>
+            <div class="stat-info">
+                <h4>Total Reviews</h4>
+                <div>{{ total_reviews|default('0') }}</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="color: var(--star); background: rgba(251, 191, 36, 0.1);"><i class="fas fa-star"></i></div>
+            <div class="stat-info">
+                <h4>Average Rating</h4>
+                <div>{{ avg_rating|default('0.0') }} <span style="font-size:14px; color:var(--muted); font-weight:500;">/ 5.0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedbacks Grid -->
+    <div class="reviews-grid">
+        {% if feedbacks %}
+            {% for review in feedbacks %}
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="avatar">{{ review.student_name[0]|upper }}</div>
+                        <div>
+                            <div class="reviewer-name">{{ review.student_name }}</div>
+                            <div class="review-date">{{ review.date }}</div>
+                        </div>
+                    </div>
+                    <div class="stars">
+                        <!-- Dynamic Star Generation -->
+                        {% for i in range(1, 6) %}
+                            {% if i <= review.rating|int %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="pdf-badge"><i class="fas fa-book-open"></i> {{ review.pdf_name }}</div>
+                <p class="review-msg">"{{ review.message }}"</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Mockup data if no Jinja data passed -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="avatar">A</div>
+                        <div>
+                            <div class="reviewer-name">Alex Johnson</div>
+                            <div class="review-date">Today at 2:30 PM</div>
+                        </div>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <div class="pdf-badge"><i class="fas fa-book-open"></i> Advanced Mathematics Vol 1</div>
+                <p class="review-msg">"Absolutely amazing material! It helped me clear my exams with ease. The formatting is clean and easy to read."</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Sidebar & Theme logic
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const toggle = document.getElementById("themeToggle");
+
+    document.getElementById("menuBtn").onclick = () => { sidebar.classList.add("active"); overlay.classList.add("active"); };
+    const closeNav = () => { sidebar.classList.remove("active"); overlay.classList.remove("active"); };
+    document.getElementById("closeSidebar").onclick = closeNav;
+    overlay.onclick = closeNav;
+
+    const applyTheme = (t) => { document.body.classList.toggle("dark", t === "dark"); toggle.checked = (t === "dark"); };
+    applyTheme(localStorage.getItem("theme"));
+    toggle.onchange = () => { const t = toggle.checked ? "dark" : "light"; applyTheme(t); localStorage.setItem("theme", t); };
+</script>
+</body>
+</html>
