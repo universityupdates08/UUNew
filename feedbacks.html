@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Seller Feedback | University Updates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #16a34a;
+            --secondary: #2563eb;
+            --accent: #f1f5f9;
+            --star: #fbbf24;
+            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark {
+            --bg: #020617;
+            --card: #0f172a;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --border: #1e293b;
+            --accent: #1e293b;
+            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            transition: background 0.3s ease;
+        }
+
+        /* --- OVERLAY & SIDEBAR --- */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(4px); opacity: 0; visibility: hidden;
+            transition: all 0.3s ease-in-out; z-index: 1500;
+        }
+        .overlay.active { opacity: 1; visibility: visible; }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 24px; height: 70px; background: var(--card);
+            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000;
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+
+        .menu-btn {
+            background: var(--accent); border: none; width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; cursor: pointer; color: var(--text); transition: 0.2s;
+        }
+        .menu-btn:hover { background: var(--border); }
+        .logo { height: 32px; width: auto; }
+
+        .sidebar {
+            position: fixed; left: -280px; top: 0; width: 280px; height: 100vh;
+            background: var(--card); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px; z-index: 2000; box-shadow: 20px 0 50px rgba(0,0,0,0.15);
+            display: flex; flex-direction: column;
+        }
+        .sidebar.active { transform: translateX(280px); }
+        
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-sidebar { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; }
+        
+        .side-nav-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; display: block;}
+        
+        .side-btn {
+            width: 100%; padding: 12px 16px; margin-bottom: 8px; border: none; border-radius: 10px;
+            background: transparent; color: var(--text); font-weight: 500; text-align: left; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .side-btn.active { background: var(--accent); color: var(--secondary); font-weight: 600; }
+        .side-btn:hover { background: var(--accent); color: var(--secondary); }
+
+        .theme-switch-wrapper {
+            background: var(--accent); padding: 12px 16px; border-radius: 12px;
+            margin-top: auto; display: flex; align-items: center; justify-content: space-between;
+        }
+        .theme-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #cbd5e1; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--secondary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* --- FEEDBACK PAGE STYLES --- */
+        .page-wrap {
+            padding: 40px 20px 100px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--text);
+        }
+
+        .page-header p {
+            color: var(--muted);
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .feedback-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            background: var(--bg);
+            color: var(--text);
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        
+        select:focus, textarea:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Interactive Star Rating */
+        .stars-container {
+            display: flex;
+            gap: 8px;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        .star-item {
+            font-size: 32px;
+            color: var(--border);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star-item:hover,
+        .star-item:hover ~ .star-item,
+        .star-item.active,
+        .star-item.active ~ .star-item {
+            color: var(--star);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            filter: brightness(1.05);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%);
+            background: #10b981; color: white; padding: 12px 24px; border-radius: 999px;
+            font-size: 14px; font-weight: 600; z-index: 2500; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+
+        @media (max-width: 768px) {
+            .feedback-card { padding: 24px 20px; }
+            .page-wrap { padding: 30px 16px 80px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-left">
+        <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
+        <img src="{{ url_for('static', filename='logo.png') }}" class="logo" alt="Logo" onerror="this.style.display='none'">
+        <div>
+            <div style="font-weight: 700; font-size: 14px; line-height: 1;">Seller Feedback</div>
+        </div>
+    </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <span class="side-nav-label" style="margin:0;">Main Menu</span>
+        <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+    </div>
+
+    <button class="side-btn" onclick="location.href='/home'"><i class="fas fa-chart-line fa-fw"></i> Dashboard</button>
+    <button class="side-btn" onclick="location.href='/profile'"><i class="fas fa-user fa-fw"></i> My Profile</button>
+    <button class="side-btn active" onclick="location.href='/feedback'"><i class="fas fa-star fa-fw"></i> Give Feedback</button>
+    <button class="side-btn" onclick="location.href='/store'"><i class="fas fa-store fa-fw"></i> Store</button>
+    
+    <div class="theme-switch-wrapper">
+        <span class="theme-label"><i class="fas fa-moon"></i> Night Mode</span>
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<!-- MAIN FEEDBACK CONTENT -->
+<div class="page-wrap">
+    <div class="page-header">
+        <h1>Submit Your Feedback</h1>
+        <p>Your reviews help our sellers improve and guide other students.</p>
+    </div>
+
+    <div class="feedback-card">
+        <form id="feedbackForm" onsubmit="submitFeedback(event)">
+            
+            <!-- Select PDF Dropdown -->
+            <div class="form-group">
+                <label class="form-label" for="pdf_id">Select PDF Material</label>
+                <select name="pdf_id" id="pdf_id" required>
+                    <option value="" disabled selected>-- Choose a purchased PDF --</option>
+                    <!-- Jinja template loop for dynamically injecting purchased PDFs -->
+                    {% if purchased_pdfs %}
+                        {% for pdf in purchased_pdfs %}
+                            <option value="{{ pdf.id }}">{{ pdf.name }} (Sold by: {{ pdf.seller_name }})</option>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback / UI Testing options -->
+                        <option value="1">Advanced Mathematics Vol 1 (Sold by: Professor X)</option>
+                        <option value="2">Quantum Physics Fundamentals (Sold by: Dr. Stark)</option>
+                        <option value="3">Data Structures in C++ (Sold by: CS Academy)</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <!-- Interactive Star Rating -->
+            <div class="form-group">
+                <label class="form-label">Rate your experience</label>
+                <!-- We use row-reverse so the CSS sibling selector logic works visually left-to-right -->
+                <div class="stars-container" id="starContainer">
+                    <i class="fas fa-star star-item" data-value="5"></i>
+                    <i class="fas fa-star star-item" data-value="4"></i>
+                    <i class="fas fa-star star-item" data-value="3"></i>
+                    <i class="fas fa-star star-item" data-value="2"></i>
+                    <i class="fas fa-star star-item" data-value="1"></i>
+                </div>
+                <!-- Hidden input to store the final rating value -->
+                <input type="hidden" name="rating" id="ratingValue" value="0" required>
+                <div id="ratingError" style="color: var(--danger); font-size: 13px; margin-top: 5px; display: none;">Please select a star rating.</div>
+            </div>
+
+            <!-- Feedback Message -->
+            <div class="form-group">
+                <label class="form-label" for="message">Detailed Review</label>
+                <textarea name="message" id="message" placeholder="What did you like about this PDF? What could be improved? Your feedback will be sent directly to the seller." required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="fas fa-paper-plane"></i> Send Feedback
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Success Toast -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i> Feedback submitted successfully!
+</div>
+
+<script>
+    // --- Sidebar & Base Logic ---
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeSidebar = document.getElementById("closeSidebar");
+    const toggle = document.getElementById("themeToggle");
+
+    const openNav = () => {
+        sidebar.classList.add("active");
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+    };
+
+    const closeNav = () => {
+        sidebar.classList.remove("active");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+    };
+
+    menuBtn.onclick = openNav;
+    closeSidebar.onclick = closeNav;
+    overlay.onclick = closeNav;
+
+    // --- Theme Logic ---
+    const applyTheme = (theme) => {
+        if (theme === "dark") {
+            document.body.classList.add("dark");
+            toggle.checked = true;
+        } else {
+            document.body.classList.remove("dark");
+            toggle.checked = false;
+        }
+    };
+    applyTheme(localStorage.getItem("theme"));
+
+    toggle.onchange = () => {
+        const newTheme = toggle.checked ? "dark" : "light";
+        applyTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+    };
+
+    // --- Star Rating Logic ---
+    const stars = document.querySelectorAll('.star-item');
+    const ratingInput = document.getElementById('ratingValue');
+    const ratingError = document.getElementById('ratingError');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            // Remove active class from all
+            stars.forEach(s => s.classList.remove('active'));
+            // Add active class to clicked (CSS handles the rest of the highlighting)
+            this.classList.add('active');
+            // Set hidden input value
+            ratingInput.value = this.getAttribute('data-value');
+            ratingError.style.display = 'none';
+        });
+    });
+
+    // --- Form Submission Logic ---
+    async function submitFeedback(e) {
+        e.preventDefault();
+        
+        // Validate Rating
+        if (ratingInput.value === "0") {
+            ratingError.style.display = 'block';
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('feedbackForm');
+        
+        // UI Loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            // Replace '/submit_feedback' with your actual backend endpoint
+            /*
+            const response = await fetch('/submit_feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if(!response.ok) throw new Error(result.error);
+            */
+
+            // Simulating network delay for UI showcase
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Show success toast
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+
+            // Reset form
+            form.reset();
+            stars.forEach(s => s.classList.remove('active'));
+            ratingInput.value = "0";
+
+        } catch (error) {
+            alert(error.message || "Something went wrong. Please try again.");
+        } finally {
+            // Reset Button
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Feedback';
+            submitBtn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
