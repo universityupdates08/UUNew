@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register | University Updates</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        :root {
+            --text-dark: #1e293b;
+            --bg-light: #fdfcfb;
+            --white: #ffffff;
+            --accent: #fb923c;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --tab-bg: #f1f5f9;
+        }
+
+        /* --- DARK MODE VARIABLES --- */
+        body.dark-mode {
+            --text-dark: #f8fafc;
+            --bg-light: #0f172a;
+            --white: #1e293b;
+            --accent: #fb923c;
+            --muted: #94a3b8;
+            --border: #334155;
+            --tab-bg: #334155;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- PREMIUM TOP NAVIGATION --- */
+        .top-nav {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 1px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(251, 146, 60, 0.12);
+        }
+
+        /* --- LEFT SIDE - DESIGNED GRADIENT & GRAPHICS --- */
+        .left {
+            flex: 1.2;
+            background-color: #ffecd2;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(252, 182, 159, 0.8) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(251, 146, 60, 0.4) 0px, transparent 50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .left {
+            background-color: #3f1e14;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(124, 45, 18, 0.6) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(251, 146, 60, 0.2) 0px, transparent 50%);
+        }
+        body.dark-mode .left h1, 
+        body.dark-mode .left h3 {
+            color: #fdba74;
+        }
+
+        .left-graphics {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cpath fill='%237c2d12' fill-opacity='0.04' d='M-150,400 Q150,100 400,400 T800,400 T1200,400 T1600,400 L1600,800 L-150,800 Z'/%3E%3C/svg%3E");
+            background-size: cover;
+            z-index: 0;
+        }
+
+        .left img {
+            width: 90px;
+            margin-bottom: 24px;
+            z-index: 1;
+            filter: drop-shadow(0 8px 15px rgba(124, 45, 18, 0.1));
+        }
+
+        .left h3 {
+            margin: 0;
+            font-weight: 600;
+            color: #7c2d12;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        .left h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(45px, 6vw, 85px);
+            margin: 10px 0;
+            font-weight: 700;
+            font-style: italic;
+            line-height: 1;
+            color: #7c2d12;
+            z-index: 1;
+        }
+
+        /* --- RIGHT SIDE - THE REGISTER BOX --- */
+        .right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: var(--bg-light);
+            position: relative;
+            z-index: 2;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--tab-bg);
+            padding: 4px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 11px;
+            font-size: 14px;
+            transition: 0.2s;
+            color: var(--text-dark);
+        }
+
+        .tab.active {
+            background: var(--white);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            color: var(--accent);
+        }
+
+        input:not([type="checkbox"]) {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--text-dark);
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        input:not([type="checkbox"]):focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.1);
+        }
+
+        input[type="checkbox"] {
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: var(--accent);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+
+        .register-btn:hover { background: #ea580c; transform: translateY(-1px); }
+
+        .terms-text {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .link-btn {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .login-link {
+            color: #ef4444;
+            font-weight: 600;
+            margin-top: 20px;
+            display: block;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* --- MODALS --- */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--white);
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 24px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .modal-close-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            cursor: pointer;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .modal-close-btn:hover { background: #ea580c; }
+
+        /* --- MOBILE CROSS-SECTION --- */
+        @media (max-width: 850px) {
+            .container { flex-direction: column; }
+            .left { padding: 60px 20px 100px 20px; min-height: 35vh; }
+            .left h1 { font-size: 45px; }
+            .right { padding: 20px; background: var(--bg-light); }
+            .box { margin-top: -80px; }
+            
+            .top-nav {
+                top: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Premium Top Actions -->
+<div class="top-nav">
+    <button class="nav-btn" onclick="window.location.href='/'" title="Return to Home">
+        <i class="bi bi-house-door"></i>
+    </button>
+    <button class="nav-btn" onclick="toggleTheme()" title="Toggle Dark Mode" id="theme-btn">
+        <i class="bi bi-moon-fill" id="theme-icon"></i>
+    </button>
+</div>
+
+<div class="container">
+    <div class="left">
+        <div class="left-graphics"></div>
+        <img src="/static/logo.png" alt="Logo">
+        <h3>Established Excellence</h3>
+        <h1>Welcome!</h1>
+    </div>
+
+    <div class="right">
+        <div class="box">
+            <h2 style="margin: 0 0 8px 0; font-weight: 700; font-size: 1.5rem;">Create Account</h2>
+            <p style="color: var(--muted); font-size: 14px; margin-bottom: 20px;">Start your academic journey today.</p>
+
+            <div class="tabs">
+                <div class="tab" onclick="window.location.href='/'">Login</div>
+                <div class="tab active">Register</div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div style="color:#ef4444; font-size:13px; font-weight:600; margin-bottom:15px;">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form id="registrationForm" method="POST" action="/register" onsubmit="handleRegistrationSubmit(event)">
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="text" name="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" required title="Please enter 10 digit mobile number">
+                <input type="email" name="email" placeholder="E-Mail Address" required>
+                <input type="password" name="password" placeholder="Password" required>
+
+                <div style="display:flex; align-items:flex-start; gap:10px; margin-top:15px; text-align: left;">
+                    <input type="checkbox" id="termsCheck" required style="margin-top: 3px;">
+                    <label for="termsCheck" class="terms-text">
+                        I agree to the
+                        <span class="link-btn" onclick="openModal('termsModal')">Terms & Conditions</span>
+                        and
+                        <span class="link-btn" onclick="openModal('privacyModal')">Privacy Policy</span>.
+                    </label>
+                </div>
+
+                <button type="submit" class="register-btn" id="submitBtn">Send OTP</button>
+            </form>
+
+            <a href="/" class="login-link">Already have an account? Sign In</a>
+        </div>
+    </div>
+</div>
+
+<div id="termsModal" class="modal">
+    <div class="modal-content">
+        <h3 style="font-family: 'Playfair Display', serif; font-style: italic;">Terms & Conditions</h3>
+        <div style="font-size:14px; line-height:1.7; color: var(--text-dark);">
+            • You must register with valid mobile and email.<br>
+            • Content is for personal use only.<br>
+            • Sharing or reselling is strictly prohibited.<br>
+            • No refunds after access.<br>
+            • Contact support via Telegram for issues.
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('termsModal')">I Understand</button>
+    </div>
+</div>
+
+<div id="privacyModal" class="modal">
+    <div class="modal-content">
+        <h3 style="font-family: 'Playfair Display', serif; font-style: italic;">Privacy Policy</h3>
+        <div style="font-size:14px; line-height:1.7; color: var(--text-dark);">
+            • We collect your name, email, and mobile number to provide our services.<br>
+            • Your data is stored securely and never sold to third parties.<br>
+            • We use your contact info only for account updates.<br>
+            • You can request data deletion by contacting support.<br>
+            • We use cookies to improve your experience.
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('privacyModal')">I Understand</button>
+    </div>
+</div>
+
+<div id="otpModal" class="modal">
+    <div class="modal-content" style="text-align: center; max-width: 400px;">
+        <h3 style="font-family: 'Playfair Display', serif; font-style: italic; margin-top: 0;">Verify Email</h3>
+        <p style="font-size: 14px; color: var(--muted); margin-bottom: 20px;">We've sent a 6-digit OTP to your email address.</p>
+
+        <input type="text" id="otpInput" inputmode="numeric" pattern="\d*" placeholder="Enter OTP" maxlength="6" style="text-align: center; font-size: 20px; letter-spacing: 4px; font-weight: bold; margin-bottom: 10px;" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+        <div id="otpErrorMsg" style="color:#ef4444; font-size:13px; font-weight:600; margin-bottom:15px; display: none;"></div>
+
+        <button type="button" class="register-btn" onclick="verifyOTPAndSubmit()" style="margin-top: 0;">Verify & Register</button>
+        <button type="button" class="register-btn" id="resendOtpBtn" onclick="requestOTP()" style="background: var(--tab-bg); color: var(--muted); cursor: not-allowed; margin-top: 10px;" disabled>
+            Resend OTP (60s)
+        </button>
+        <div style="margin-top: 15px;">
+            <span class="link-btn" onclick="closeModal('otpModal')" style="font-size: 14px; color: var(--muted);">Cancel</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        const body = document.body;
+        const themeIcon = document.getElementById('theme-icon');
+        
+        body.classList.toggle('dark-mode');
+        
+        if (body.classList.contains('dark-mode')) {
+            themeIcon.classList.replace('bi-moon-fill', 'bi-sun-fill');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            themeIcon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // Apply saved theme on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-icon').classList.replace('bi-moon-fill', 'bi-sun-fill');
+        }
+    });
+
+    // --- Modals Logic ---
+    function openModal(id) {
+        document.getElementById(id).style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+
+    window.onclick = function(event) {
+        if (event.target.className === 'modal') {
+            event.target.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+    }
+
+    // --- OTP Verification Logic ---
+    let resendTimer;
+    let countdown = 60;
+
+    async function handleRegistrationSubmit(event) {
+        event.preventDefault(); // Stop normal form submission
+
+        // Check form validity before sending OTP
+        const form = document.getElementById("registrationForm");
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        // Trigger OTP sending process
+        await requestOTP();
+    }
+
+    async function requestOTP() {
+        const email = document.querySelector('input[name="email"]').value;
+        const name = document.querySelector('input[name="name"]').value; 
+        const submitBtn = document.getElementById('submitBtn');
+        const otpErrorMsg = document.getElementById("otpErrorMsg");
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sending OTP...";
+        otpErrorMsg.style.display = "none";
+
+        try {
+            const response = await fetch("/send_otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: email, name: name })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                openModal('otpModal');
+                startResendTimer();
+            } else {
+                alert(data.message); 
+            }
+        } catch (error) {
+            alert("An error occurred. Please try again.");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Send OTP";
+        }
+    }
+
+    function startResendTimer() {
+        countdown = 60;
+        const resendBtn = document.getElementById("resendOtpBtn");
+        resendBtn.disabled = true;
+        resendBtn.style.background = "var(--tab-bg)";
+        resendBtn.style.color = "var(--muted)";
+        resendBtn.style.cursor = "not-allowed";
+
+        clearInterval(resendTimer);
+        resendTimer = setInterval(() => {
+            countdown--;
+            resendBtn.innerText = `Resend OTP (${countdown}s)`;
+
+            if (countdown <= 0) {
+                clearInterval(resendTimer);
+                resendBtn.disabled = false;
+                resendBtn.innerText = "Resend OTP";
+                resendBtn.style.background = "var(--accent)";
+                resendBtn.style.color = "white";
+                resendBtn.style.cursor = "pointer";
+            }
+        }, 1000);
+    }
+
+    async function verifyOTPAndSubmit() {
+        const email = document.querySelector('input[name="email"]').value;
+        const otp = document.getElementById("otpInput").value;
+        const errorMsg = document.getElementById("otpErrorMsg");
+
+        if (otp.length !== 6) {
+            errorMsg.innerText = "Please enter a valid 6-digit OTP.";
+            errorMsg.style.display = "block";
+            return;
+        }
+
+        try {
+            const response = await fetch("/verify_otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: email, otp: otp })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById("registrationForm").submit();
+            } else {
+                errorMsg.innerText = data.message;
+                errorMsg.style.display = "block";
+            }
+        } catch (error) {
+            errorMsg.innerText = "Verification failed. Please check your connection.";
+            errorMsg.style.display = "block";
+        }
+    }
+</script>
+</body>
+</html>
