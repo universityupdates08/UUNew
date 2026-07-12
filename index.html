@@ -4,10 +4,8 @@
     <meta charset="utf-8">
     <title>Home | University Updates</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --bg: #f8fafc;
@@ -21,7 +19,6 @@
             --star: #fbbf24;
             --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
         }
-
         body.dark {
             --bg: #020617;
             --card: #0f172a;
@@ -31,83 +28,36 @@
             --accent: #1e293b;
             --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
         }
-
         * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; transition: 0.3s; overflow-x: hidden; }
 
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
-            transition: background-color 0.3s, color 0.3s;
-            overflow-x: hidden;
-        }
-
-        /* --- OVERLAY & SIDEBAR --- */
-        .overlay {
-            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(4px); opacity: 0; visibility: hidden;
-            transition: all 0.3s ease-in-out; z-index: 1500;
-        }
+        /* OVERLAY & SIDEBAR */
+        .overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 1500; }
         .overlay.active { opacity: 1; visibility: visible; }
-
-        /* --- HEADER --- */
-        .header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 24px; height: 70px; background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000; transition: background 0.3s;
-        }
+        
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 0 24px; height: 70px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; transition: background 0.3s; }
         body.dark .header { background: rgba(15, 23, 42, 0.8); }
-        
-        .header-left { display: flex; align-items: center; gap: 12px; }
-        .header-right { display: flex; align-items: center; gap: 12px; }
-
-        .menu-btn {
-            background: var(--accent); border: none; width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 10px; cursor: pointer; color: var(--text); transition: 0.2s;
-        }
+        .header-left, .header-right { display: flex; align-items: center; gap: 12px; }
+        .menu-btn { background: var(--accent); border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; color: var(--text); transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .menu-btn:hover { background: var(--border); }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text); }
         
-        .logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
-        
-        .btn-base {
-            border: none; padding: 10px 18px; border-radius: 10px; font-weight: 600;
-            font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px;
-            transition: 0.2s; text-decoration: none;
-        }
+        .btn-base { border: none; padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; text-decoration: none; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
         .btn-outline:hover { background: var(--accent); }
         .btn-primary { background: var(--text); color: var(--bg); }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        body.dark .btn-primary:hover { box-shadow: 0 4px 12px rgba(255,255,255,0.1); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            position: fixed; left: -280px; top: 0; width: 280px; height: 100vh;
-            background: var(--card); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 20px; z-index: 2000; box-shadow: 20px 0 50px rgba(0,0,0,0.15);
-            display: flex; flex-direction: column;
-        }
+        /* SIDEBAR */
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100vh; background: var(--card); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px; z-index: 2000; display: flex; flex-direction: column; }
         .sidebar.active { transform: translateX(280px); }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .sidebar-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
         .close-sidebar { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; }
-        
-        .side-nav-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; display: block;}
-        .side-btn {
-            width: 100%; padding: 12px 16px; margin-bottom: 8px; border: none; border-radius: 10px;
-            background: transparent; color: var(--text); font-weight: 500; text-align: left; cursor: pointer; transition: 0.2s;
-            display: flex; align-items: center; gap: 12px; text-decoration: none;
-        }
-        .side-btn:hover, .side-btn.active { background: var(--accent); color: var(--primary); font-weight: 600; }
-
-        .theme-switch-wrapper {
-            background: var(--accent); padding: 12px 16px; border-radius: 12px;
-            margin-top: auto; display: flex; align-items: center; justify-content: space-between;
-        }
-        .theme-label { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .side-btn { width: 100%; padding: 12px 16px; margin-bottom: 8px; border-radius: 10px; background: transparent; color: var(--text); font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 12px; text-decoration: none; border: none; text-align: left; }
+        .side-btn:hover { background: var(--accent); color: var(--primary); font-weight: 600; }
+        .theme-switch-wrapper { background: var(--accent); padding: 12px 16px; border-radius: 12px; margin-top: auto; display: flex; align-items: center; justify-content: space-between; }
         .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; inset: 0; background-color: #cbd5e1; transition: .4s; border-radius: 20px; }
@@ -115,133 +65,92 @@
         input:checked + .slider { background-color: var(--primary); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* --- HERO SECTION --- */
-        .hero {
-            position: relative; padding: 60px 24px; max-width: 1200px; margin: 0 auto;
-            display: flex; align-items: center; justify-content: space-between; gap: 40px;
-            min-height: 80vh;
-        }
-
+        /* HERO */
+        .hero { position: relative; padding: 60px 24px; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; min-height: 80vh; }
         .hero-content { flex: 1; max-width: 600px; z-index: 2; }
-        
-        .badge {
-            display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
-            background: var(--accent); border: 1px solid var(--border); border-radius: 999px;
-            font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 24px;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif; font-size: clamp(40px, 5vw, 64px);
-            line-height: 1.1; margin: 0 0 20px 0; color: var(--text);
-        }
-
-        .text-gradient {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--accent); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 24px; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 5vw, 64px); line-height: 1.1; margin: 0 0 20px 0; color: var(--text); }
+        .text-gradient { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { font-size: 18px; color: var(--muted); margin: 0 0 32px 0; line-height: 1.6; }
-
         .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
-        .hero-btns .btn-base { padding: 14px 28px; font-size: 16px; }
-
-        /* Abstract Graphics */
-        .hero-graphics {
-            flex: 1; position: relative; height: 500px; display: flex;
-            justify-content: center; align-items: center;
-        }
-
+        .hero-graphics { flex: 1; position: relative; height: 500px; display: flex; justify-content: center; align-items: center; }
         .shape { position: absolute; border-radius: 50%; filter: blur(60px); z-index: 0; opacity: 0.6; animation: float 8s ease-in-out infinite; }
         .shape-1 { width: 300px; height: 300px; background: rgba(251, 146, 60, 0.4); top: 10%; right: 20%; }
         .shape-2 { width: 250px; height: 250px; background: rgba(37, 99, 235, 0.3); bottom: 10%; left: 10%; animation-delay: -4s; }
-
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* --- PARTNER BADGES --- */
-        .partners-bar {
-            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-            background: var(--card); padding: 24px; text-align: center;
-        }
-        .partners-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 16px; letter-spacing: 1px; }
-        .partners-grid {
-            display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; max-width: 1000px; margin: 0 auto;
-        }
-        .partner-item { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--muted); font-size: 18px; filter: grayscale(100%); opacity: 0.7; transition: 0.3s; }
-        .partner-item:hover { filter: grayscale(0%); opacity: 1; color: var(--text); }
-        .partner-item.razorpay:hover { color: #3395ff; }
-        
-        /* --- SECTION STYLES --- */
+        /* CAROUSELS & GRIDS */
         .section { padding: 80px 24px; max-width: 1200px; margin: 0 auto; }
         .section-header { text-align: center; margin-bottom: 48px; }
         .section-header h2 { font-size: 32px; font-weight: 700; margin: 0 0 12px 0; }
         .section-header p { color: var(--muted); font-size: 16px; margin: 0; }
+        
+        .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; }
+        .carousel { display: flex; overflow-x: auto; gap: 24px; scroll-snap-type: x mandatory; padding: 20px 5px; scrollbar-width: none; scroll-behavior: smooth; flex: 1; }
+        .carousel::-webkit-scrollbar { display: none; }
+        .carousel-item { flex: 0 0 auto; width: 260px; scroll-snap-align: center; }
+        
+        .nav-btn { background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); position: absolute; z-index: 10; transition: 0.2s; }
+        .nav-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .nav-left { left: -20px; }
+        .nav-right { right: -20px; }
 
-        /* Features Grid */
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .feature-box { text-align: center; padding: 40px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 24px; transition: 0.3s; }
-        .feature-box:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--primary); }
-        .feature-icon { width: 64px; height: 64px; margin: 0 auto 20px; background: var(--accent); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-        .feature-box h3 { font-size: 18px; margin: 0 0 10px; }
-        .feature-box p { font-size: 14px; color: var(--muted); margin: 0; }
-
-        /* Teams Grid */
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto; }
         .team-card { background: var(--card); padding: 30px; border-radius: 24px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); transition: 0.3s; }
-        .team-card:hover { transform: translateY(-5px); border-color: var(--secondary); }
-        .t-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--primary)); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .team-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 20px 40px -5px rgba(0,0,0,0.1); }
+        body.dark .team-card:hover { box-shadow: 0 20px 40px -5px rgba(255,255,255,0.05); }
+        
+        .t-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--primary)); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; box-shadow: 0 10px 20px -5px var(--primary); }
         .team-card h3 { margin: 0 0 4px; font-size: 18px; }
-        .team-card p { margin: 0; color: var(--muted); font-size: 14px; font-weight: 500; }
+        .team-card p { margin: 0 0 12px 0; color: var(--muted); font-size: 14px; }
+        .team-badge { display: inline-block; background: var(--accent); color: var(--text); font-size: 11px; padding: 4px 10px; border-radius: 99px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Products Grid */
+        /* POPUP SYSTEM (MODALS) */
+        .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+        .modal-wrap.active { display: flex; opacity: 1; }
+        .modal-box { background: var(--card); border-radius: 20px; width: 90%; max-width: 420px; padding: 30px; position: relative; transform: translateY(20px); transition: 0.3s; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-wrap.active .modal-box { transform: translateY(0); }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--accent); border: none; width: 32px; height: 32px; border-radius: 50%; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;}
+        .modal-close:hover { background: #ef4444; color: white; }
+        .modal-title { font-size: 24px; font-weight: 700; margin: 0 0 20px; text-align: center; color: var(--text); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--muted); }
+        .form-input { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: inherit; }
+        .form-input:focus { outline: 2px solid var(--primary); border-color: transparent; }
+        .modal-view { display: none; }
+        
+        .alert-box { padding: 12px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 15px; display: none; text-align: center; }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        body.dark .alert-success { background: rgba(22, 101, 52, 0.2); color: #4ade80; border-color: rgba(74, 222, 128, 0.2); }
+        body.dark .alert-error { background: rgba(153, 27, 27, 0.2); color: #f87171; border-color: rgba(248, 113, 113, 0.2); }
+
+        /* PRODUCTS */
         .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-        .p-image { height: 160px; background: linear-gradient(135deg, var(--accent), var(--border)); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 40px; position: relative; }
-        .p-badge { position: absolute; top: 12px; right: 12px; background: var(--primary); color: white; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
+        .p-image { height: 160px; background: linear-gradient(135deg, var(--accent), var(--border)); display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--muted); }
         .p-details { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
-        .p-title { font-weight: 700; font-size: 16px; margin: 0 0 8px; color: var(--text); }
-        .p-author { font-size: 13px; color: var(--muted); margin: 0 0 12px; display: flex; align-items: center; gap: 6px; }
-        .p-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--star); margin-bottom: 16px; font-weight: 600; }
-        .p-rating span { color: var(--muted); margin-left: 4px; font-weight: 500; }
+        .p-title { font-weight: 700; font-size: 16px; margin: 0 0 8px; }
         .p-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid var(--border); padding-top: 16px; }
-        .p-price { font-weight: 800; font-size: 18px; color: var(--text); }
-        .p-price strike { color: var(--muted); font-size: 14px; font-weight: 500; margin-right: 6px; }
-        .btn-cart { background: var(--accent); border: none; padding: 8px 16px; border-radius: 10px; color: var(--text); cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; text-decoration: none;}
-        .btn-cart:hover { background: var(--primary); color: white; }
 
-        /* --- FOOTER --- */
+        /* FOOTER */
         .footer { background: var(--card); border-top: 1px solid var(--border); padding: 60px 24px 40px; margin-top: 40px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+        .f-col h4 { font-size: 16px; font-weight: 700; margin: 0 0 20px; }
+        .f-col a { display: block; color: var(--muted); text-decoration: none; margin-bottom: 12px; font-size: 14px; cursor: pointer; transition: 0.2s;}
+        .f-col a:hover { color: var(--primary); transform: translateX(5px); }
         
-        .f-col h4 { font-size: 16px; font-weight: 700; margin: 0 0 20px; color: var(--text); }
-        .f-col a { display: block; color: var(--muted); text-decoration: none; margin-bottom: 12px; font-size: 14px; transition: 0.2s; }
-        .f-col a:hover { color: var(--primary); }
-        
-        .f-brand { max-width: 300px; }
-        .f-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: block; }
-        .f-desc { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-        
-        .social-links { display: flex; gap: 16px; }
-        .social-links a { color: var(--muted); font-size: 20px; transition: 0.2s; }
-        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
+        .razorpay-badge { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); padding: 10px 20px; border-radius: 12px; border: 1px solid var(--border); margin-top: 20px;}
+        .razorpay-badge img { height: 24px; filter: grayscale(100%); transition: 0.3s; }
+        .razorpay-badge:hover img { filter: grayscale(0%); }
 
-        .footer-bottom { border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding-top: 24px; text-align: center; color: var(--muted); font-size: 13px; }
-
-        @media (max-width: 992px) {
-            .hero { flex-direction: column; text-align: center; padding-top: 40px; }
+        @media (max-width: 768px) {
+            .nav-btn { display: none; }
+            .hero { flex-direction: column; text-align: center; padding-top: 40px;}
             .hero-btns { justify-content: center; }
-            .hero-graphics { height: 300px; width: 100%; margin-top: 40px; }
-            .badge { margin: 0 auto 24px; }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 36px; }
-            .hero-btns { flex-direction: column; width: 100%; }
-            .hero-btns .btn-base { width: 100%; justify-content: center; }
+            .hero h1 { font-size: 38px; }
         }
     </style>
 </head>
-
 <body>
 
 <div class="overlay" id="overlay"></div>
@@ -257,8 +166,8 @@
             <a href="/home" class="btn-base btn-outline">Dashboard</a>
             <a href="/store_cart" class="btn-base btn-primary"><i class="fas fa-shopping-cart"></i> Cart</a>
         {% else %}
-            <a href="/login" class="btn-base btn-outline">Login</a>
-            <a href="/register" class="btn-base btn-primary">Sign Up</a>
+            <button onclick="openPopup('loginView')" class="btn-base btn-outline">Login</button>
+            <button onclick="openPopup('registerView')" class="btn-base btn-primary">Sign Up</button>
         {% endif %}
     </div>
 </div>
@@ -266,23 +175,21 @@
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <span class="side-nav-label" style="margin:0;">Menu</span>
+        <span style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Menu</span>
         <button class="close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
     </div>
-
-    <a href="/" class="side-btn active"><i class="fas fa-home fa-fw"></i> Home</a>
+    <a href="/" class="side-btn"><i class="fas fa-home fa-fw"></i> Home</a>
     <a href="/store" class="side-btn"><i class="fas fa-store fa-fw"></i> Digital Store</a>
-    <a href="/freeread" class="side-btn"><i class="fas fa-book-open fa-fw"></i> Free Resources</a>
     
     {% if current_user.is_authenticated %}
         <a href="/home" class="side-btn"><i class="fas fa-chart-line fa-fw"></i> Dashboard</a>
         <a href="/logout" class="side-btn"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
     {% else %}
-        <a href="/login" class="side-btn"><i class="fas fa-sign-in-alt fa-fw"></i> Login</a>
+        <button onclick="openPopup('loginView')" class="side-btn"><i class="fas fa-sign-in-alt fa-fw"></i> Login</button>
     {% endif %}
     
     <div class="theme-switch-wrapper">
-        <span class="theme-label"><i class="fas fa-moon"></i> Night Mode</span>
+        <span style="font-size: 14px; font-weight: 600;"><i class="fas fa-moon"></i> Dark Mode</span>
         <label class="switch">
             <input type="checkbox" id="themeToggle">
             <span class="slider"></span>
@@ -290,280 +197,462 @@
     </div>
 </div>
 
-<!-- HERO SECTION -->
+<!-- HERO -->
 <div class="hero">
     <div class="hero-content">
-        <div class="badge">
-            <i class="fas fa-bolt"></i> Elevate Your Learning
-        </div>
+        <div class="badge"><i class="fas fa-bolt"></i> Elevate Your Learning</div>
         <h1>Your Ultimate <br> <span class="text-gradient">Academic Arsenal</span></h1>
         <p>Access high-quality, verified digital study materials, notes, and past papers. Join thousands of students achieving academic excellence today.</p>
-        
         <div class="hero-btns">
-            <a href="/store" class="btn-base btn-primary">
-                Explore Store <i class="fas fa-arrow-right"></i>
-            </a>
-            <a href="/register" class="btn-base btn-outline">
-                Become a Seller
-            </a>
+            <a href="/store" class="btn-base btn-primary">Explore Store <i class="fas fa-arrow-right"></i></a>
+            <button onclick="openPopup('sellerRegisterView')" class="btn-base btn-outline">Become a Seller</button>
+            <button onclick="openPopup('statusView')" class="btn-base btn-outline" style="border:none; text-decoration: underline;">Check Request Status</button>
         </div>
     </div>
-    
     <div class="hero-graphics">
         <div class="shape shape-1"></div>
         <div class="shape shape-2"></div>
-        
-        <div class="floating-card">
-            <div class="fc-icon"><i class="fas fa-file-pdf"></i></div>
-            <div class="fc-text">
-                <h4>Verified Notes</h4>
-                <p>Top-rated by students</p>
-            </div>
-        </div>
     </div>
 </div>
 
-<!-- PARTNER BADGES -->
-<div class="partners-bar">
-    <div class="partners-title">Powered By & Trusted Across</div>
-    <div class="partners-grid">
-        <div class="partner-item razorpay">
-            <i class="fas fa-shield-check" style="font-size: 24px;"></i> Razorpay Secure
-        </div>
-        <div class="partner-item">
-            <i class="fas fa-university"></i> CCSU Network
-        </div>
-        <div class="partner-item">
-            <i class="fas fa-graduation-cap"></i> MSU Students
-        </div>
-        <div class="partner-item">
-            <i class="fas fa-laptop-code"></i> AKTU Verified
-        </div>
-        <div class="partner-item">
-            <i class="fas fa-users"></i> 100K+ Community
-        </div>
-    </div>
-</div>
-
-<!-- FEATURES SECTION (Why Choose Us) -->
-<div class="section" style="background: var(--card); border-bottom: 1px solid var(--border); max-width: 100%;">
+<!-- SELLERS CAROUSEL SECTION -->
+<div class="section" style="background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
     <div class="section-header">
-        <h2>Why Choose Us?</h2>
-        <p>Everything you need to succeed, all in one platform.</p>
+        <h2>Top Verified Sellers</h2>
+        <p>Learn from the best educators mapped directly from our network.</p>
     </div>
-    <div class="features" style="max-width: 1200px; margin: 0 auto;">
-        <div class="feature-box">
-            <div class="feature-icon"><i class="fas fa-check-double"></i></div>
-            <h3>Quality Assured</h3>
-            <p>Every PDF and study material is reviewed by our community and verified for academic accuracy.</p>
+    <div class="carousel-container">
+        <button class="nav-btn nav-left" onclick="scrollTrack('sellersCarousel', -1)"><i class="fas fa-arrow-left"></i></button>
+        <div class="carousel" id="sellersCarousel">
+            <!-- JS will populate sellers here -->
         </div>
-        <div class="feature-box">
-            <div class="feature-icon" style="color: var(--secondary);"><i class="fas fa-bolt"></i></div>
-            <h3>Instant Access</h3>
-            <p>Purchase and download your resources immediately. No waiting times, just pure studying.</p>
-        </div>
-        <div class="feature-box">
-            <div class="feature-icon" style="color: #8b5cf6;"><i class="fas fa-coins"></i></div>
-            <h3>Earn by Sharing</h3>
-            <p>Upload your own high-quality notes and earn money every time a student buys them.</p>
-        </div>
+        <button class="nav-btn nav-right" onclick="scrollTrack('sellersCarousel', 1)"><i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
 
-<!-- FEATURED PRODUCTS SECTION (Trending Resources) -->
+<!-- PRODUCTS SECTION -->
 <div class="section">
     <div class="section-header">
         <h2>Trending Resources</h2>
-        <p>Discover what other students are studying right now.</p>
     </div>
-    
     <div class="products">
         {% if trending_products %}
             {% for product in trending_products %}
             <div class="product-card">
-                <div class="p-image">
-                    <i class="fas fa-book"></i>
-                    {% if product.discount and product.discount > 0 %}
-                    <div class="p-badge">-{{ product.discount }}%</div>
-                    {% endif %}
-                </div>
+                <div class="p-image"><i class="fas fa-book"></i></div>
                 <div class="p-details">
                     <h3 class="p-title">{{ product.name }}</h3>
-                    <div class="p-author"><i class="fas fa-store"></i> Seller: {{ product.seller_name }}</div>
-                    <div class="p-rating">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                        <span>({{ product.reviews_count | default('42') }} reviews)</span>
-                    </div>
                     <div class="p-footer">
-                        <div class="p-price">
-                            {% if product.discount and product.discount > 0 %}
-                                {% set final_price = product.price - (product.price * (product.discount / 100)) %}
-                                <strike>₹{{ product.price }}</strike> ₹{{ final_price|int }}
-                            {% else %}
-                                ₹{{ product.price }}
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Auto-redirects to login if not authenticated via Flask @login_required, then adds to cart -->
-                        <a href="/add_to_cart/{{ product.id }}" class="btn-cart">
-                            <i class="fas fa-shopping-cart"></i> Buy Now
-                        </a>
+                        <div style="font-weight: 800; font-size: 18px;">₹{{ product.price }}</div>
+                        <a href="/add_to_cart/{{ product.id }}" class="btn-base btn-outline">Buy Now</a>
                     </div>
                 </div>
             </div>
             {% endfor %}
         {% else %}
-            <!-- Fallback Mockup Data if no Jinja context passed -->
+            <!-- Mock Fallback -->
             <div class="product-card">
-                <div class="p-image">
-                    <i class="fas fa-square-root-alt"></i>
-                    <div class="p-badge">BESTSELLER</div>
-                </div>
+                <div class="p-image"><i class="fas fa-book-open"></i></div>
                 <div class="p-details">
-                    <h3 class="p-title">Engineering Calculus Complete Guide</h3>
-                    <div class="p-author"><i class="fas fa-store"></i> Seller: EduNotes</div>
-                    <div class="p-rating">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
-                        <span>(89 reviews)</span>
-                    </div>
+                    <h3 class="p-title">Engineering Mathematics</h3>
                     <div class="p-footer">
-                        <div class="p-price">₹249</div>
-                        <a href="/add_to_cart/1" class="btn-cart"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                        <div style="font-weight: 800; font-size: 18px;">₹199</div>
+                        <button class="btn-base btn-outline">Buy Now</button>
                     </div>
                 </div>
             </div>
             <div class="product-card">
-                <div class="p-image">
-                    <i class="fas fa-atom"></i>
-                </div>
+                <div class="p-image"><i class="fas fa-atom"></i></div>
                 <div class="p-details">
                     <h3 class="p-title">Hindi Bhasha aur Sampreshan</h3>
-                    <div class="p-author"><i class="fas fa-store"></i> Seller: Academic Press</div>
-                    <div class="p-rating">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        <span>(312 reviews)</span>
-                    </div>
                     <div class="p-footer">
-                        <div class="p-price">₹199</div>
-                        <a href="/add_to_cart/2" class="btn-cart"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                        <div style="font-weight: 800; font-size: 18px;">₹99</div>
+                        <button class="btn-base btn-outline">Buy Now</button>
                     </div>
                 </div>
             </div>
         {% endif %}
     </div>
-    
-    <div style="text-align: center; margin-top: 40px;">
-        <a href="/store" class="btn-base btn-outline" style="display: inline-flex;">View Entire Store</a>
-    </div>
 </div>
 
-<!-- TEAMS SECTION -->
-<div class="section" style="background: var(--card); border-top: 1px solid var(--border); max-width: 100%;">
+<!-- ADMIN TEAM CAROUSEL SECTION -->
+<div class="section" style="background: var(--card); border-top: 1px solid var(--border);">
     <div class="section-header">
         <h2>Meet Our Team</h2>
         <p>The minds building the future of digital education.</p>
     </div>
-    
-    <div class="team-grid">
-        <div class="team-card">
-            <div class="t-avatar">AC</div>
-            <h3>Aditya Chaudhary</h3>
-            <p>Owner & Lead Designer</p>
+    <div class="carousel-container">
+        <button class="nav-btn nav-left" onclick="scrollTrack('adminCarousel', -1)"><i class="fas fa-arrow-left"></i></button>
+        <div class="carousel" id="adminCarousel">
+            <div class="team-card carousel-item">
+                <div class="t-avatar" style="background: url('https://ui-avatars.com/api/?name=Aditya+Chaudhary&background=0D8ABC&color=fff') center/cover;"></div>
+                <h3>Aditya Chaudhary</h3>
+                <p>Owner & Lead Designer</p>
+                <div class="team-badge">Admin</div>
+            </div>
+            <div class="team-card carousel-item">
+                <div class="t-avatar" style="background: url('https://ui-avatars.com/api/?name=Chetan+Joshi&background=8b5cf6&color=fff') center/cover;"></div>
+                <h3>Chetan Joshi</h3>
+                <p>Co-Owner & Development</p>
+                <div class="team-badge">Admin</div>
+            </div>
+            <div class="team-card carousel-item">
+                <div class="t-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">DM</div>
+                <h3>D. M.</h3>
+                <p>Operations Manager</p>
+                <div class="team-badge">Team</div>
+            </div>
+            <div class="team-card carousel-item">
+                <div class="t-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">PC</div>
+                <h3>P. C.</h3>
+                <p>Content Moderation</p>
+                <div class="team-badge">Team</div>
+            </div>
+            <div class="team-card carousel-item">
+                <div class="t-avatar" style="background: linear-gradient(135deg, #ec4899, #be185d);">AP</div>
+                <h3>A. P.</h3>
+                <p>Student Support</p>
+                <div class="team-badge">Team</div>
+            </div>
+            <div class="team-card carousel-item">
+                <div class="t-avatar" style="background: linear-gradient(135deg, #6366f1, #4338ca);">AM</div>
+                <h3>A. M.</h3>
+                <p>Resource Verification</p>
+                <div class="team-badge">Team</div>
+            </div>
+            <div class="team-card carousel-item">
+                <div class="t-avatar" style="background: linear-gradient(135deg, #14b8a6, #0f766e);">GS</div>
+                <h3>G. S.</h3>
+                <p>Technical Support</p>
+                <div class="team-badge">Team</div>
+            </div>
         </div>
-        <div class="team-card">
-            <div class="t-avatar" style="background: linear-gradient(135deg, #8b5cf6, var(--secondary));">CJ</div>
-            <h3>Chetan Joshi</h3>
-            <p>Co-Owner & Development</p>
-        </div>
+        <button class="nav-btn nav-right" onclick="scrollTrack('adminCarousel', 1)"><i class="fas fa-arrow-right"></i></button>
     </div>
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
     <div class="footer-grid">
-        <div class="f-brand f-col">
-            <span class="f-logo">University Updates</span>
-            <p class="f-desc">Your ultimate digital educational platform. Get the latest verified notes, datesheets, and academic resources tailored for your success.</p>
-            <div class="social-links">
-                <a href="#"><i class="fab fa-whatsapp"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <a href="#"><i class="fab fa-telegram"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
+        <div class="f-col">
+            <div style="font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 16px;">University Updates</div>
+            <p style="color: var(--muted); font-size: 14px;">Your ultimate digital educational platform. Verified notes, datesheets, and academic resources.</p>
+            
+            <!-- Payment Partner Razorpay -->
+            <div class="razorpay-badge">
+                <span style="font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Payment Partner</span>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay">
             </div>
         </div>
-        
         <div class="f-col">
             <h4>Quick Links</h4>
-            <a href="/">Home</a>
-            <a href="/about">About Us</a>
+            <a onclick="openContentPopup('About Us', 'University Updates is an educational platform dedicated to providing students with high-quality notes, datesheets, and automated updates directly to their devices. We are managed by a dedicated team bridging the gap between universities and students.')">About Us</a>
             <a href="/store">Digital Store</a>
             <a href="/freeread">Free Resources</a>
         </div>
-        
         <div class="f-col">
             <h4>Support</h4>
-            <a href="/help">Help Center</a>
-            <a href="/contact">Contact Us</a>
-            <a href="/register">Become a Seller</a>
+            <a onclick="openContentPopup('Help Center', 'Need help? Check your dashboard to raise a grievance ticket. Our Admin team reviews all tickets and replies promptly to resolve download, payment, or file-related issues.')">Help Center</a>
+            <a onclick="openPopup('sellerRegisterView')">Become a Seller</a>
         </div>
-        
         <div class="f-col">
             <h4>Legal</h4>
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms & Conditions</a>
-            <a href="/refunds">Refund Policy</a>
+            <a onclick="openContentPopup('Privacy Policy', 'We value your privacy. We do not sell your personal data. Your phone number is strictly used for OTP verification and securely delivering your purchased PDF materials.')">Privacy Policy</a>
+            <a onclick="openContentPopup('Terms & Conditions', 'By using University Updates, you agree to not redistribute our paid PDFs. Seller payouts are calculated after standard platform and gateway deductions.')">Terms & Conditions</a>
+            <a onclick="openContentPopup('Refund Policy', 'Digital goods once downloaded cannot be refunded. If you face a payment failure but amount is deducted, it will auto-refund to your source within 5-7 business days.')">Refund Policy</a>
         </div>
     </div>
-    
-    <div class="footer-bottom">
-        &copy; 2026 University Updates. All rights reserved. Designed for students, by students.
+    <div style="text-align: center; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); padding-top: 20px;">
+        &copy; 2026 University Updates. All rights reserved. Designed by Aditya Chaudhary.
+    </div>
+</div>
+
+<!-- ============================================== -->
+<!-- MASTER POPUP MODAL CONTAINER -->
+<!-- ============================================== -->
+<div class="modal-wrap" id="masterModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closePopup()"><i class="fas fa-times"></i></button>
+        
+        <!-- 1. LOGIN VIEW -->
+        <div id="loginView" class="modal-view">
+            <h2 class="modal-title">Welcome Back</h2>
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" name="mobile" class="form-input" placeholder="10-digit mobile number" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-base btn-primary" style="width:100%; padding:14px; margin-top:10px;">Login</button>
+            </form>
+            <p style="text-align:center; font-size:13px; margin-top:20px; color:var(--muted);">Don't have an account? <a onclick="openPopup('registerView')" style="color:var(--primary); cursor:pointer;">Sign Up</a></p>
+        </div>
+
+        <!-- 2. REGISTER VIEW -->
+        <div id="registerView" class="modal-view">
+            <h2 class="modal-title">Create Account</h2>
+            <form action="/register" method="POST">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" name="mobile" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-base btn-primary" style="width:100%; padding:14px; margin-top:10px;">Sign Up</button>
+            </form>
+        </div>
+
+        <!-- 3. BECOME A SELLER VIEW -->
+        <div id="sellerRegisterView" class="modal-view">
+            <h2 class="modal-title">Become a Seller</h2>
+            <p style="font-size:13px; color:var(--muted); text-align:center; margin-bottom:20px;">Submit your details for Admin Verification.</p>
+            
+            <div id="sellerAlert" class="alert-box"></div>
+            
+            <form id="sellerForm" onsubmit="handleSellerSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="s_name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="s_email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" id="s_mobile" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Create Password</label>
+                    <input type="password" id="s_pass" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="s_cpass" class="form-input" required>
+                </div>
+                <button type="submit" id="sellerSubmitBtn" class="btn-base btn-primary" style="width:100%; padding:14px; margin-top:10px;">Submit Request to Admin</button>
+            </form>
+        </div>
+
+        <!-- 4. CHECK SELLER STATUS VIEW -->
+        <div id="statusView" class="modal-view">
+            <h2 class="modal-title">Check Request Status</h2>
+            <p style="font-size:13px; color:var(--muted); text-align:center; margin-bottom:20px;">Enter your registered mobile number to check admin approval status.</p>
+            
+            <div id="statusAlert" class="alert-box"></div>
+            
+            <form onsubmit="handleStatusCheck(event)">
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" id="check_mobile" class="form-input" placeholder="10-digit mobile number" required>
+                </div>
+                <button type="submit" id="statusBtn" class="btn-base btn-primary" style="width:100%; padding:14px;">Check Status</button>
+            </form>
+            
+            <div id="statusResultBox" style="margin-top:20px; text-align:center; display:none;">
+                <h4 style="margin:0 0 5px; font-size:14px; color:var(--muted);">Current Status:</h4>
+                <div id="statusResultText" style="padding:15px; border-radius:10px; background:var(--accent); font-weight:700; font-size:15px; color:var(--primary);"></div>
+            </div>
+        </div>
+
+        <!-- 5. DYNAMIC CONTENT VIEW (For Footer Links) -->
+        <div id="contentView" class="modal-view">
+            <h2 class="modal-title" id="contentTitle">Title</h2>
+            <div id="contentBody" style="font-size:14px; color:var(--muted); line-height:1.7;">Body</div>
+        </div>
+
     </div>
 </div>
 
 <script>
-    // --- Sidebar Logic ---
+    // --- Sidebar & Mobile Menu ---
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("overlay");
     const menuBtn = document.getElementById("menuBtn");
     const closeSidebar = document.getElementById("closeSidebar");
-    const toggle = document.getElementById("themeToggle");
 
-    const openNav = () => {
-        sidebar.classList.add("active");
-        overlay.classList.add("active");
-        document.body.style.overflow = "hidden";
-    };
+    const openNav = () => { sidebar.classList.add("active"); overlay.classList.add("active"); document.body.style.overflow = "hidden"; };
+    const closeNav = () => { sidebar.classList.remove("active"); overlay.classList.remove("active"); document.body.style.overflow = ""; };
 
-    const closeNav = () => {
-        sidebar.classList.remove("active");
-        overlay.classList.remove("active");
-        document.body.style.overflow = "";
-    };
+    menuBtn.onclick = openNav; closeSidebar.onclick = closeNav; overlay.onclick = closeNav;
 
-    menuBtn.onclick = openNav;
-    closeSidebar.onclick = closeNav;
-    overlay.onclick = closeNav;
-
-    // --- Theme Logic ---
+    // --- Dark Mode ---
     const applyTheme = (theme) => {
-        if (theme === "dark") {
-            document.body.classList.add("dark");
-            toggle.checked = true;
-        } else {
-            document.body.classList.remove("dark");
-            toggle.checked = false;
-        }
+        const toggle = document.getElementById("themeToggle");
+        if (theme === "dark") { document.body.classList.add("dark"); toggle.checked = true; } 
+        else { document.body.classList.remove("dark"); toggle.checked = false; }
     };
-
-    // Check local storage on load
     applyTheme(localStorage.getItem("theme"));
-
-    toggle.onchange = () => {
-        const newTheme = toggle.checked ? "dark" : "light";
-        applyTheme(newTheme);
-        localStorage.setItem("theme", newTheme);
+    document.getElementById("themeToggle").onchange = (e) => {
+        const newTheme = e.target.checked ? "dark" : "light";
+        applyTheme(newTheme); localStorage.setItem("theme", newTheme);
     };
-</script>
 
+    // --- Carousel Scrolling Logic ---
+    function scrollTrack(trackId, direction) {
+        const track = document.getElementById(trackId);
+        const scrollAmount = 300 * direction;
+        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+
+    // --- Popup System Logic ---
+    const modalWrap = document.getElementById("masterModal");
+    function openPopup(viewId) {
+        document.querySelectorAll('.modal-view').forEach(v => v.style.display = 'none');
+        // Reset dynamic forms and alerts
+        document.querySelectorAll('.alert-box').forEach(a => a.style.display = 'none');
+        if(document.getElementById('sellerForm')) document.getElementById('sellerForm').reset();
+        if(document.getElementById('check_mobile')) document.getElementById('check_mobile').value = '';
+        if(document.getElementById('statusResultBox')) document.getElementById('statusResultBox').style.display = 'none';
+        
+        document.getElementById(viewId).style.display = 'block';
+        modalWrap.classList.add('active');
+        document.body.style.overflow = "hidden";
+        closeNav();
+    }
+
+    function closePopup() {
+        modalWrap.classList.remove('active');
+        document.body.style.overflow = "";
+    }
+
+    function openContentPopup(title, content) {
+        document.getElementById('contentTitle').innerText = title;
+        document.getElementById('contentBody').innerHTML = content;
+        openPopup('contentView');
+    }
+
+    function showAlert(elementId, message, type) {
+        const el = document.getElementById(elementId);
+        el.innerText = message;
+        el.className = `alert-box alert-${type}`;
+        el.style.display = 'block';
+    }
+
+    // --- Seller Form Handling (Backend Integration) ---
+    async function handleSellerSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById('s_name').value;
+        const email = document.getElementById('s_email').value;
+        const mobile = document.getElementById('s_mobile').value;
+        const pass = document.getElementById('s_pass').value;
+        const cpass = document.getElementById('s_cpass').value;
+        
+        if (pass !== cpass) {
+            showAlert('sellerAlert', "Passwords do not match!", "error");
+            return;
+        }
+
+        const btn = document.getElementById('sellerSubmitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        try {
+            const response = await fetch('/api/seller_request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, mobile, password: pass })
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                showAlert('sellerAlert', result.message, "success");
+                document.getElementById('sellerForm').reset();
+            } else {
+                showAlert('sellerAlert', result.message || "Submission failed.", "error");
+            }
+        } catch (err) {
+            showAlert('sellerAlert', "Network error. Please try again.", "error");
+        }
+        
+        btn.disabled = false;
+        btn.innerText = 'Submit Request to Admin';
+    }
+
+    // --- Check Status Handling (Backend Integration) ---
+    async function handleStatusCheck(e) {
+        e.preventDefault();
+        const mobile = document.getElementById('check_mobile').value;
+        
+        const btn = document.getElementById('statusBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+        
+        const resultBox = document.getElementById('statusResultBox');
+        const resultText = document.getElementById('statusResultText');
+        resultBox.style.display = 'none';
+        document.getElementById('statusAlert').style.display = 'none';
+
+        try {
+            const response = await fetch('/api/seller_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mobile })
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                resultText.innerText = result.status;
+                if(result.raw_status === 'blocked') resultText.style.color = '#ef4444';
+                else if(result.raw_status === 'created' || result.raw_status === 'completed') resultText.style.color = '#10b981';
+                else resultText.style.color = 'var(--primary)';
+                
+                resultBox.style.display = 'block';
+            } else {
+                showAlert('statusAlert', result.message, "error");
+            }
+        } catch (err) {
+            showAlert('statusAlert', "Network error. Please try again.", "error");
+        }
+
+        btn.disabled = false;
+        btn.innerText = 'Check Status';
+    }
+
+    // --- Fetch & Render Sellers (Fallback handled smoothly) ---
+    async function fetchSellers() {
+        const container = document.getElementById('sellersCarousel');
+        try {
+            const response = await fetch('/api/sellers');
+            if(!response.ok) throw new Error("API not available");
+            const data = await response.json();
+            // Implement real mapping here if route is added later
+        } catch (error) {
+            // Generating beautiful mock cards as fallback
+            const mockSellers = [
+                { name: 'Dr. RS Agarwal', handle: 'rs_agarwal', color: '#3b82f6', subject: 'Mathematics' },
+                { name: 'Priya Sharma', handle: 'priya_notes', color: '#10b981', subject: 'Computer Science' },
+                { name: 'Code Masters', handle: 'code_masters', color: '#8b5cf6', subject: 'Programming' },
+                { name: 'Amit Kumar', handle: 'amit_ak', color: '#f59e0b', subject: 'Physics' },
+                { name: 'Neha Singh', handle: 'neha_study', color: '#ec4899', subject: 'Chemistry' }
+            ];
+            
+            container.innerHTML = mockSellers.map(s => `
+                <div class="team-card carousel-item" style="border: 2px solid transparent;">
+                    <div class="t-avatar" style="background: ${s.color}; box-shadow: 0 10px 20px -5px ${s.color};">${s.name.charAt(0)}</div>
+                    <h3>${s.name}</h3>
+                    <p style="color: var(--primary); font-size:13px; font-weight:600;">@${s.handle}</p>
+                    <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">Expert in ${s.subject}</div>
+                    <div style="font-size:11px; background:var(--accent); padding:4px 8px; border-radius:6px; display:inline-block;"><i class="fas fa-check-circle" style="color:#10b981;"></i> Verified Creator</div>
+                </div>
+            `).join('');
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", fetchSellers);
+</script>
 </body>
 </html>
