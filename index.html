@@ -85,24 +85,53 @@
         .section-header h2 { font-size: 32px; font-weight: 700; margin: 0 0 12px 0; }
         .section-header p { color: var(--muted); font-size: 16px; margin: 0; }
         
-        .carousel-container { position: relative; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; }
-        .carousel { display: flex; overflow-x: auto; gap: 24px; scroll-snap-type: x mandatory; padding: 20px 5px; scrollbar-width: none; scroll-behavior: smooth; flex: 1; }
-        .carousel::-webkit-scrollbar { display: none; }
-        .carousel-item { flex: 0 0 auto; width: 260px; scroll-snap-align: center; }
-        
-        .nav-btn { background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); position: absolute; z-index: 10; transition: 0.2s; }
-        .nav-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
-        .nav-left { left: -20px; }
-        .nav-right { right: -20px; }
+        /* UPDATED CAROUSEL STYLES */
+.carousel-container { 
+    position: relative; 
+    max-width: 900px; /* Constrain width for the effect */
+    margin: 40px auto; 
+    overflow: hidden;
+}
 
-        .team-card { background: var(--card); padding: 30px; border-radius: 24px; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); transition: 0.3s; }
-        .team-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 20px 40px -5px rgba(0,0,0,0.1); }
-        body.dark .team-card:hover { box-shadow: 0 20px 40px -5px rgba(255,255,255,0.05); }
-        
-        .t-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary), var(--primary)); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; box-shadow: 0 10px 20px -5px var(--primary); }
-        .team-card h3 { margin: 0 0 4px; font-size: 18px; }
-        .team-card p { margin: 0 0 12px 0; color: var(--muted); font-size: 14px; }
-        .team-badge { display: inline-block; background: var(--accent); color: var(--text); font-size: 11px; padding: 4px 10px; border-radius: 99px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.carousel { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    gap: 20px;
+    padding: 40px 0;
+    transition: transform 0.5s ease;
+}
+
+.team-card { 
+    flex: 0 0 220px; /* Width of smaller cards */
+    transition: all 0.5s ease; 
+    transform: scale(0.85); 
+    opacity: 0.6; 
+    filter: grayscale(1);
+    background: var(--card);
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+/* The active/centered card */
+.team-card.active { 
+    transform: scale(1.1); 
+    opacity: 1; 
+    filter: grayscale(0);
+    z-index: 10;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.t-avatar { 
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%; 
+    margin: 0 auto 15px; 
+    background-size: cover; 
+    background-position: center;
+}
 
         /* POPUP SYSTEM (MODALS) */
         .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
@@ -653,6 +682,30 @@
     }
     
     document.addEventListener("DOMContentLoaded", fetchSellers);
+
+    function updateActiveCard() {
+    const carousel = document.getElementById('adminCarousel');
+    const cards = carousel.querySelectorAll('.team-card');
+    const containerCenter = carousel.offsetWidth / 2;
+
+    cards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenter = cardRect.left + (cardRect.width / 2) - carousel.getBoundingClientRect().left;
+        
+        // Remove class from all
+        card.classList.remove('active');
+        
+        // Add active if closest to center
+        if (Math.abs(cardCenter - containerCenter) < 150) {
+            card.classList.add('active');
+        }
+    });
+}
+
+// Attach to scroll event
+document.getElementById('adminCarousel').addEventListener('scroll', updateActiveCard);
+// Run once on load
+updateActiveCard();
 </script>
 </body>
 </html>
